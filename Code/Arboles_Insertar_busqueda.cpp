@@ -1,5 +1,7 @@
 #include<iostream>
 #include "BalancearArbol.h"
+#include "GraficarArbol.h"
+
 using namespace std;
 
 struct Nodo{
@@ -23,6 +25,7 @@ Arbol* crearArbol(){
     aux->raiz=NULL;
     return aux;
 }
+
 //Prototipos
 void menu();
 Nodo *crearNodo(int n);
@@ -33,6 +36,7 @@ bool busqueda(Nodo *arbol, int n);
 //Funcion de menu
 void menu(){
     int dato, opcion, contador=0;
+
     Arbol *a = crearArbol();
     do{
         cout<<"Menu"<<endl;
@@ -50,12 +54,18 @@ void menu(){
         system("pause");
         cout<<"\n";
         break;
-    case 2:
+    case 2:{
         cout<<"\nMostrando el arbol completo\n";
         mostrarArbol(a->raiz, contador);
+        int gd = DETECT, gm;
+        initgraph(&gd, &gm, "C:\\TC\\BGI");
+        int windowWidth = getmaxx();
+        int windowHeight = getmaxy();
+        dibujarArbol<Nodo>(a->raiz, windowWidth/2, 100, windowWidth/4, 0);
         cout<<"\n";
         system("pause");
         break;
+        }
     case 3:
         cout<<"\nDigite el elemento a buscar: ";
         cin>>dato;
@@ -90,6 +100,7 @@ Nodo *crearNodo(int n){
 
     return nuevo_nodo;
 }
+
 bool busqueda(Nodo *arbol, int n){
     if(arbol==NULL){
         return false;
@@ -141,5 +152,23 @@ void mostrarArbol(Nodo *arbol,int cont){
         mostrarArbol(arbol->izq,cont+1);
     }
 }
+/*
+Nodo *recuperarNodo(Nodo *arbol, int n){
+    else if(arbol->dato ==n){
+        return arbol;
 
+    }else if(n< arbol->dato){
+        return busqueda(arbol->izq,n);
+    }else{
+        return busqueda(arbol->der,n);
+        }
+}
 
+void eliminarNodo(Nodo *arbol, int n){
+    Nodo *encontrado, *aux;
+    if(busqueda(arbol,n)){
+        encontrado = recuperarNodo(arbol,n);
+
+    }
+}
+*/
