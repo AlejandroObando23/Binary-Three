@@ -1,22 +1,39 @@
 #include<iostream>
+#include "BalancearArbol.h"
 using namespace std;
 
 struct Nodo{
     int dato;
+    int factorEQ;
+    Nodo *padre;
     Nodo *der;
     Nodo *izq;
 };
+
+struct Arbol{
+	int totalIzq;
+    Nodo *raiz;
+    int totalDer;
+};
+
+Arbol* crearArbol(){
+	Arbol *aux=new Arbol();
+    aux->totalIzq=0;
+    aux->totalDer=0;
+    aux->raiz=NULL;
+    return aux;
+}
 //Prototipos
 void menu();
 Nodo *crearNodo(int n);
-void insertarNodo(Nodo *&arbol, int n);
+void insertarNodo(Arbol *a,Nodo *n);
 void mostrarArbol(Nodo *arbol, int contador);
 bool busqueda(Nodo *arbol, int n);
-Nodo *arbol=NULL;
 
 //Funcion de menu
 void menu(){
     int dato, opcion, contador=0;
+    Arbol *a = crearArbol();
     do{
         cout<<"Menu"<<endl;
         cout<<"1. Insertar un nuevo nodo"<<endl;
@@ -29,25 +46,27 @@ void menu(){
     case 1:
         cout<<"Ingrese un numero: ";
         cin>>dato;
-        insertarNodo(arbol, dato);
+        insertarNodo(a,crearNodo(dato));
+        system("pause");
         cout<<"\n";
         break;
     case 2:
         cout<<"\nMostrando el arbol completo\n";
-        mostrarArbol(arbol, contador);
+        mostrarArbol(a->raiz, contador);
         cout<<"\n";
         system("pause");
         break;
     case 3:
         cout<<"\nDigite el elemento a buscar: ";
         cin>>dato;
-        if(busqueda(arbol, dato)== true){
+        if(busqueda(a->raiz, dato)== true){
             cout<<"\n El elemento ha sido encontrado en el arbol";
 
         }else{
         cout<<"\nElemento no encontrado\n";
         }
-
+        system("pause");
+        break;
         }
         system("cls");
     }while(4!=opcion);
@@ -85,21 +104,31 @@ bool busqueda(Nodo *arbol, int n){
 
         }
 }
-void insertarNodo(Nodo *&arbol, int n){
-    if(arbol == NULL){
-        Nodo *nuevo_nodo =crearNodo(n);
-        arbol = nuevo_nodo;
 
-    }else{
-        int valorRaiz =arbol->dato;
-        if(n < valorRaiz){
-            insertarNodo(arbol->izq,n);
-        }else{
-            insertarNodo(arbol->der,n);
-        }
-
-    }
+void insertarNodo(Arbol *a,Nodo *n){
+	Nodo *aux,*ant;
+	if(a->raiz == NULL){
+		a->raiz=n;
+	}else{
+		aux=a->raiz;
+		while(aux!=NULL){
+			ant=aux;
+			if(n->dato > aux ->dato){
+				aux=aux->der;
+			}else{
+				aux=aux->izq;
+			}
+		}
+		n->padre=ant;
+		if(n->dato > ant->dato){
+			ant->der=n;
+		}else{
+			ant->izq=n;
+		}
+		balancear<Arbol, Nodo>(a,ant);
+	}
 }
+
 void mostrarArbol(Nodo *arbol,int cont){
     if(arbol == NULL){
         return;
