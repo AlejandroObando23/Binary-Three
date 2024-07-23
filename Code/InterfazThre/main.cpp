@@ -1,4 +1,7 @@
 #include <windows.h>
+#include <string>
+#include <iostream>
+using namespace std;
 #define ID_LABEL 100
 #define ID_BTNSALIR 101
 #define ID_BTNINCERCION 102
@@ -6,8 +9,11 @@
 #define ID_BTNRECORRIDOS 104
 #define ID_BTNBUSQUEDA 105
 #define ID_BTNELIMINACION 106
-#define ID_BTNCLOSE 107
+#define ID_BTNGUARDAR 107
+#define ID_TEXT 108
 
+//Ventanas
+//Funciones
 LRESULT CALLBACK ProcediementoVentana(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK ProcedimientoVentanaSecundaria(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK ProcedimientoVentanaTerciaria(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -15,12 +21,27 @@ LRESULT CALLBACK ProcedimientoVentanaCuaternaria(HWND hwnd, UINT msg, WPARAM wPa
 LRESULT CALLBACK ProcedimientoVentanaQuinta(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK ProcedimientoVentanaSexta(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK ProcedimientoVentanaSeptima(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+//Asiganaciones necesarias para las funciones
 HWND hwndVentanaSecundaria = NULL;
 HWND hwndVentanaTerciaria= NULL;
 HWND hwndVentanaCuaternaria = NULL;
 HWND hwndVentanaQuinta = NULL;
 HWND hwndVentanaSexta = NULL;
 HWND hwndVentanaSeptima = NULL;
+
+//Texto
+HWND textEdit;
+
+
+/*
+Secundario = Incersion
+Tercero = Balanceo
+Cuarto = Busqueda
+Quinto = Recorridos
+Sexto = Eliminacion
+
+
+*/
 
 HINSTANCE hInstancia;
 
@@ -316,22 +337,27 @@ LRESULT CALLBACK ProcediementoVentana(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
 LRESULT CALLBACK ProcedimientoVentanaSecundaria(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
     case WM_CREATE: {
-        CreateWindow(
-            "BUTTON",
-            "Cerrar",
-            WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-            50, 50, 100, 30,
-            hwnd,
-            (HMENU)ID_BTNCLOSE,
-            NULL,
-            NULL
-        );
+        CreateWindow("Static","Ingrese un numero : ",WS_VISIBLE | WS_CHILD |SS_NOTIFY,20 ,10,150,20,hwnd,(HMENU)ID_LABEL,NULL,NULL);
+        textEdit=CreateWindow("EDIT",   // Predefined class; Unicode assumed
+                NULL,         // No window title
+                WS_CHILD | WS_VISIBLE | WS_BORDER | ES_LEFT| ES_NUMBER, // Styles
+                170,         // x position
+                10,         // y position
+                200,        // Text box width
+                25,        // Text box height
+                hwnd,       // Parent window
+                (HMENU) ID_TEXT,       // No menu.
+                GetModuleHandle(NULL),
+                NULL);
+        CreateWindow("BUTTON", "Guardar",  WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,80, 50, 100, 30, hwnd,(HMENU)ID_BTNGUARDAR,NULL,NULL);
 
         break;
     }
     case WM_COMMAND: {
-        if (LOWORD(wParam) == ID_BTNCLOSE) {
-            DestroyWindow(hwnd);
+        if (LOWORD(wParam) == ID_BTNGUARDAR) {
+                char buffer[256];
+                GetWindowText(textEdit, buffer, 256);
+                cout<<buffer;
         }
         break;
     }
@@ -354,7 +380,7 @@ LRESULT CALLBACK ProcedimientoVentanaTerciaria(HWND hwnd, UINT msg, WPARAM wPara
             WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
             50, 50, 100, 30,
             hwnd,
-            (HMENU)ID_BTNCLOSE,
+            (HMENU)ID_BTNGUARDAR,
             NULL,
             NULL
         );
@@ -362,7 +388,7 @@ LRESULT CALLBACK ProcedimientoVentanaTerciaria(HWND hwnd, UINT msg, WPARAM wPara
         break;
     }
     case WM_COMMAND: {
-        if (LOWORD(wParam) == ID_BTNCLOSE) {
+        if (LOWORD(wParam) == ID_BTNGUARDAR) {
             DestroyWindow(hwnd);
         }
         break;
@@ -380,22 +406,28 @@ LRESULT CALLBACK ProcedimientoVentanaTerciaria(HWND hwnd, UINT msg, WPARAM wPara
 LRESULT CALLBACK ProcedimientoVentanaCuaternaria(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
         switch (msg) {
     case WM_CREATE: {
-        CreateWindow(
-            "BUTTON",
-            "Cerrar",
-            WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-            50, 50, 100, 30,
-            hwnd,
-            (HMENU)ID_BTNCLOSE,
-            NULL,
-            NULL
-        );
+        CreateWindow("Static","Ingrese un numero : ",WS_VISIBLE | WS_CHILD |SS_NOTIFY,20 ,10,150,20,hwnd,(HMENU)ID_LABEL,NULL,NULL);
+        textEdit=CreateWindow("EDIT",   // Predefined class; Unicode assumed
+                NULL,         // No window title
+                WS_CHILD | WS_VISIBLE | WS_BORDER | ES_LEFT| ES_NUMBER, // Styles
+                170,         // x position
+                10,         // y position
+                200,        // Text box width
+                25,        // Text box height
+                hwnd,       // Parent window
+                (HMENU) ID_TEXT,       // No menu.
+                GetModuleHandle(NULL),
+                NULL);
+        CreateWindow("BUTTON", "Buscar",  WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,80, 50, 100, 30, hwnd,(HMENU)ID_BTNGUARDAR,NULL,NULL);
+
 
         break;
     }
     case WM_COMMAND: {
-        if (LOWORD(wParam) == ID_BTNCLOSE) {
-            DestroyWindow(hwnd);
+        if (LOWORD(wParam) == ID_BTNGUARDAR) {
+                char buffer[256];
+                GetWindowText(textEdit, buffer, 256);
+                cout<<buffer;
         }
         break;
     }
@@ -418,7 +450,7 @@ LRESULT CALLBACK ProcedimientoVentanaQuinta(HWND hwnd, UINT msg, WPARAM wParam, 
             WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
             50, 50, 100, 30,
             hwnd,
-            (HMENU)ID_BTNCLOSE,
+            (HMENU)ID_BTNGUARDAR,
             NULL,
             NULL
         );
@@ -426,7 +458,7 @@ LRESULT CALLBACK ProcedimientoVentanaQuinta(HWND hwnd, UINT msg, WPARAM wParam, 
         break;
     }
     case WM_COMMAND: {
-        if (LOWORD(wParam) == ID_BTNCLOSE) {
+        if (LOWORD(wParam) == ID_BTNGUARDAR) {
             DestroyWindow(hwnd);
         }
         break;
@@ -445,22 +477,29 @@ LRESULT CALLBACK ProcedimientoVentanaQuinta(HWND hwnd, UINT msg, WPARAM wParam, 
 LRESULT CALLBACK ProcedimientoVentanaSexta(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
     switch (msg) {
     case WM_CREATE: {
-        CreateWindow(
-            "BUTTON",
-            "Cerrar",
-            WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-            50, 50, 100, 30,
-            hwnd,
-            (HMENU)ID_BTNCLOSE,
-            NULL,
-            NULL
-        );
+        CreateWindow("Static","Ingrese un numero : ",WS_VISIBLE | WS_CHILD |SS_NOTIFY,20 ,10,150,20,hwnd,(HMENU)ID_LABEL,NULL,NULL);
+        textEdit=CreateWindow("EDIT",   // Predefined class; Unicode assumed
+                NULL,         // No window title
+                WS_CHILD | WS_VISIBLE | WS_BORDER | ES_LEFT| ES_NUMBER, // Styles
+                170,         // x position
+                10,         // y position
+                200,        // Text box width
+                25,        // Text box height
+                hwnd,       // Parent window
+                (HMENU) ID_TEXT,       // No menu.
+                GetModuleHandle(NULL),
+                NULL);
+        CreateWindow("BUTTON", "Eliminar",  WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,80, 50, 100, 30, hwnd,(HMENU)ID_BTNGUARDAR,NULL,NULL);
+
+
 
         break;
     }
     case WM_COMMAND: {
-        if (LOWORD(wParam) == ID_BTNCLOSE) {
-            DestroyWindow(hwnd);
+        if (LOWORD(wParam) == ID_BTNGUARDAR) {
+                 char buffer[256];
+                GetWindowText(textEdit, buffer, 256);
+                cout<<buffer;
         }
         break;
     }
