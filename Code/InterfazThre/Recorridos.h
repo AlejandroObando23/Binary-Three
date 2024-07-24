@@ -1,40 +1,41 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
 
 
 template <typename T>
-void preOrden(T *arbol){
+void preOrden(T *arbol, string& resultado){
     if(arbol == NULL){
         return;
     }
     else{
-        cout << arbol->dato << " - ";
-        preOrden(arbol->izq);
-        preOrden(arbol->der);
+        resultado += to_string(arbol->dato) + " - ";
+        preOrden(arbol->izq, resultado);
+        preOrden(arbol->der, resultado);
     }
 }
 
 template <typename T>
-void inOrden(T *arbol){
+void inOrden(T *arbol, string& resultado){
     if(arbol == NULL){
         return;
     }
     else{
-        inOrden(arbol->izq);
-        cout << arbol->dato << " - ";
-        inOrden(arbol->der);
+        inOrden(arbol->izq, resultado);
+        resultado += to_string(arbol->dato) + " - ";
+        inOrden(arbol->der, resultado);
     }
 }
 
 template <typename T>
-void postOrden(T *arbol){
+void postOrden(T *arbol, string& resultado){
     if(arbol == NULL){
         return;
     }
     else{
-        postOrden(arbol->izq);
-        postOrden(arbol->der);
-        cout << arbol->dato << " - ";
+        postOrden(arbol->izq, resultado);
+        postOrden(arbol->der, resultado);
+        resultado += to_string(arbol->dato) + " - ";
     }
 }

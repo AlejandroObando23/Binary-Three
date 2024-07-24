@@ -42,6 +42,7 @@ void destruirNodo(Nodo *nodo);
 //Funcion de menu
 void menu(){
     int dato, opcion, contador=0, datoEliminar;
+    string resultado;
     initwindow(720, 720);
     Arbol *a = crearArbol();
     do{
@@ -93,20 +94,21 @@ void menu(){
         }
     case 5:
         cout << "\nRecorrido en PreOrden: ";
-        preOrden(a->raiz);
-        cout << endl;
+        preOrden(a->raiz, resultado);
+        cout << resultado <<endl;
         break;
     case 6:
         cout << "\nRecorrido en InOrden: ";
-        inOrden(a->raiz);
-        cout << endl;
+        inOrden(a->raiz, resultado);
+        cout << resultado << endl;
         break;
     case 7:
         cout << "\nRecorrido en PostOrden: ";
-        postOrden(a->raiz);
-        cout << endl;
+        postOrden(a->raiz, resultado);
+        cout << resultado<< endl;
         break;
     }
+        resultado = "";
         setbkcolor(0);
         cleardevice();
         int windowWidth = getmaxx();
