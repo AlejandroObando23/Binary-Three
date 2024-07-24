@@ -42,10 +42,13 @@ void destruirNodo(Nodo *nodo);
 //Funcion de menu
 void menu(){
     int dato, opcion, contador=0, datoEliminar;
-
+    initwindow(720, 720);
+    int windowWidth = getmaxx();
+    int windowHeight = getmaxy();
     Arbol *a = crearArbol();
     do{
         cout<<"Menu"<<endl;
+        cout << "=== No cierre la ventana gráfica === " << endl;
         cout<<"1. Insertar un nuevo nodo"<<endl;
         cout<<"2. Mostrar el arbol completo"<<endl;
         cout<<"3. Buscar un elemento en el arbol"<<endl;
@@ -57,20 +60,21 @@ void menu(){
         cout<<"Opcion: "<<endl;
         cin>>opcion;
         switch(opcion){
-    case 1:
+    case 1:{
         cout<<"Ingrese un numero: ";
         cin>>dato;
         insertarNodo(a,crearNodo(dato));
+
+        dibujarArbol<Nodo>(a->raiz, windowWidth/2, 100, windowWidth/4, 0);
         system("pause");
         cout<<"\n";
         break;
+        }
     case 2:{
         cout<<"\nMostrando el arbol completo\n";
         mostrarArbol(a->raiz, contador);
-        int gd = DETECT, gm;
-        initgraph(&gd, &gm, "C:\\TC\\BGI");
-        int windowWidth = getmaxx();
-        int windowHeight = getmaxy();
+
+
         dibujarArbol<Nodo>(a->raiz, windowWidth/2, 100, windowWidth/4, 0);
         cout<<"\n";
         system("pause");

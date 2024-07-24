@@ -12,6 +12,7 @@ void dibujarArbol(T *raiz, int x, int y, int distancia, int nivel ){
 
     int radioCirculo = 20;
     int tamanioFuente = 1;
+
     setbkcolor(5);
     setcolor(CYAN);
     circle(x,y,radioCirculo);
