@@ -12,6 +12,8 @@ using namespace std;
 #define ID_BTNELIMINACION 106
 #define ID_BTNGUARDAR 107
 #define ID_TEXT 108
+ #define  ID_LABEL_RESULT 109
+#define ID_LABEL_TITULO 110
 
 
 //Ventanas
@@ -37,9 +39,9 @@ HWND textEdit;
 
 /*
 Secundario = Incersion
-Tercero = Preorden
+Tercero = Recorridos
 Cuarto = Busqueda
-Quinto = Recorridos
+Quinto = ----------
 Sexto = Eliminacion
 
 
@@ -48,6 +50,7 @@ Sexto = Eliminacion
 HINSTANCE hInstancia;
     int dato, opcion, contador=0, datoEliminar;
     Arbol *a = crearArbol();
+    string resultado;
 
 
 
@@ -76,12 +79,12 @@ int WINAPI WinMain(HINSTANCE hIns, HINSTANCE hInstanciaPrevia, LPSTR lpCmdLinea,
     ventana = CreateWindowEx(0, "IdentificadorVentana", "Controles", WS_OVERLAPPEDWINDOW | WS_SYSMENU,
                              400, 80, 580, 630, HWND_DESKTOP, NULL, hIns, NULL);
 
+    CreateWindow("Static","Arbol Binario: ",WS_VISIBLE | WS_CHILD |SS_NOTIFY,100 ,10,150,20,ventana,(HMENU)ID_LABEL_TITULO,NULL,NULL);
     CreateWindowEx(0, "BUTTON", "Salir", BS_CENTER | WS_VISIBLE | WS_CHILD, 100, 280, 150, 30, ventana, (HMENU)ID_BTNSALIR, NULL, NULL);
     CreateWindowEx(0, "BUTTON", "Creacion/Insercion", BS_CENTER | WS_VISIBLE | WS_CHILD, 100, 240, 150, 30, ventana, (HMENU)ID_BTNINCERCION, NULL, NULL);
-    CreateWindowEx(0, "BUTTON", "Balanceo", BS_CENTER | WS_VISIBLE | WS_CHILD, 100, 200, 150, 30, ventana, (HMENU)ID_BTNBALANCEO, NULL, NULL);
-    CreateWindowEx(0, "BUTTON", "Recorridos", BS_CENTER | WS_VISIBLE | WS_CHILD, 100, 160, 150, 30, ventana, (HMENU)ID_BTNRECORRIDOS, NULL, NULL);
-    CreateWindowEx(0, "BUTTON", "Busqueda", BS_CENTER | WS_VISIBLE | WS_CHILD, 100, 120, 150, 30, ventana, (HMENU)ID_BTNBUSQUEDA, NULL, NULL);
-    CreateWindowEx(0, "BUTTON", "Eliminacion", BS_CENTER | WS_VISIBLE | WS_CHILD, 100, 80, 150, 30, ventana, (HMENU)ID_BTNELIMINACION, NULL, NULL);
+    CreateWindowEx(0, "BUTTON", "Recorridos", BS_CENTER | WS_VISIBLE | WS_CHILD, 100, 200, 150, 30, ventana, (HMENU)ID_BTNBALANCEO, NULL, NULL);
+    CreateWindowEx(0, "BUTTON", "Busqueda", BS_CENTER | WS_VISIBLE | WS_CHILD, 100, 160, 150, 30, ventana, (HMENU)ID_BTNBUSQUEDA, NULL, NULL);
+    CreateWindowEx(0, "BUTTON", "Eliminacion", BS_CENTER | WS_VISIBLE | WS_CHILD, 100, 120, 150, 30, ventana, (HMENU)ID_BTNELIMINACION, NULL, NULL);
 
     ShowWindow(ventana, nCmdShow);
     UpdateWindow(ventana);
@@ -398,42 +401,63 @@ LRESULT CALLBACK ProcedimientoVentanaSecundaria(HWND hwnd, UINT msg, WPARAM wPar
 LRESULT CALLBACK ProcedimientoVentanaTerciaria(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
     case WM_CREATE: {
-
-        CreateWindow("Static","Ingrese un numero : ",WS_VISIBLE | WS_CHILD |SS_NOTIFY,20 ,10,150,20,hwnd,(HMENU)ID_LABEL,NULL,NULL);
-        textEdit=CreateWindow("EDIT",   // Predefined class; Unicode assumed
-                NULL,         // No window title
-                WS_CHILD | WS_VISIBLE | WS_BORDER | ES_LEFT| ES_NUMBER, // Styles
-                170,         // x position
-                10,         // y position
-                200,        // Text box width
-                25,        // Text box height
-                hwnd,       // Parent window
-                (HMENU) ID_TEXT,       // No menu.
-                GetModuleHandle(NULL),
-                NULL);
-        CreateWindow("BUTTON", "Guardar",  WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,80, 50, 100, 30, hwnd,(HMENU)ID_BTNGUARDAR,NULL,NULL);
-
+        // Create a button with the label "Presionar"
+        CreateWindow("BUTTON", "Presionar",
+                     WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
+                     20, 10, 150, 20, hwnd, (HMENU)ID_BTNGUARDAR, NULL, NULL);
         break;
     }
     case WM_COMMAND: {
         if (LOWORD(wParam) == ID_BTNGUARDAR) {
-            cout  <<"Hola";
 
+            preOrden(a->raiz, resultado);
 
+            const char* charArray = resultado.c_str();
 
+            CreateWindow("Static", "Preorden",
+                         WS_VISIBLE | WS_CHILD | SS_NOTIFY,
+                         20, 50, 250, 20, hwnd, (HMENU)ID_LABEL, NULL, NULL);
 
+            CreateWindow("Static", charArray,
+                         WS_VISIBLE | WS_CHILD | SS_NOTIFY,
+                         20, 80, 250, 20, hwnd, (HMENU)ID_LABEL_RESULT, NULL, NULL);
+            resultado="";
+            inOrden(a->raiz, resultado);
+
+            charArray = resultado.c_str();
+
+            CreateWindow("Static", "InOrden",
+                         WS_VISIBLE | WS_CHILD | SS_NOTIFY,
+                         20, 110, 250, 20, hwnd, (HMENU)ID_LABEL, NULL, NULL);
+
+            CreateWindow("Static", charArray,
+                         WS_VISIBLE | WS_CHILD | SS_NOTIFY,
+                         20, 140, 250, 20, hwnd, (HMENU)ID_LABEL_RESULT, NULL, NULL);
+                        inOrden(a->raiz, resultado);
+            resultado="";
+            postOrden(a->raiz, resultado);
+
+            charArray = resultado.c_str();
+
+            CreateWindow("Static", "PostOrden",
+                         WS_VISIBLE | WS_CHILD | SS_NOTIFY,
+                         20, 170, 250, 20, hwnd, (HMENU)ID_LABEL, NULL, NULL);
+
+            CreateWindow("Static", charArray,
+                         WS_VISIBLE | WS_CHILD | SS_NOTIFY,
+                         20, 200, 250, 20, hwnd, (HMENU)ID_LABEL_RESULT, NULL, NULL);
         }
         break;
     }
-    case WM_DESTROY: {
-        hwndVentanaTerciaria = NULL;
+        case WM_DESTROY: {
+        hwndVentanaSecundaria = NULL;
         break;
     }
     default: {
         return DefWindowProc(hwnd, msg, wParam, lParam);
     }
     }
-    return 0;
+
 }
 LRESULT CALLBACK ProcedimientoVentanaCuaternaria(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
         switch (msg) {
