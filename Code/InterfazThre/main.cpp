@@ -446,6 +446,7 @@ LRESULT CALLBACK ProcedimientoVentanaTerciaria(HWND hwnd, UINT msg, WPARAM wPara
             CreateWindow("Static", charArray,
                          WS_VISIBLE | WS_CHILD | SS_NOTIFY,
                          20, 200,  400, 40,  hwnd, (HMENU)ID_LABEL_RESULT, NULL, NULL);
+            resultado="";
         }
         break;
     }
