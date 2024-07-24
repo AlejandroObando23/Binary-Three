@@ -43,8 +43,6 @@ void destruirNodo(Nodo *nodo);
 void menu(){
     int dato, opcion, contador=0, datoEliminar;
     initwindow(720, 720);
-    int windowWidth = getmaxx();
-    int windowHeight = getmaxy();
     Arbol *a = crearArbol();
     do{
         cout<<"Menu"<<endl;
@@ -59,14 +57,12 @@ void menu(){
         cout<<"8. Salir"<<endl;
         cout<<"Opcion: "<<endl;
         cin>>opcion;
+
         switch(opcion){
     case 1:{
         cout<<"Ingrese un numero: ";
         cin>>dato;
         insertarNodo(a,crearNodo(dato));
-
-        dibujarArbol<Nodo>(a->raiz, windowWidth/2, 100, windowWidth/4, 0);
-        system("pause");
         cout<<"\n";
         break;
         }
@@ -74,10 +70,7 @@ void menu(){
         cout<<"\nMostrando el arbol completo\n";
         mostrarArbol(a->raiz, contador);
 
-
-        dibujarArbol<Nodo>(a->raiz, windowWidth/2, 100, windowWidth/4, 0);
         cout<<"\n";
-        system("pause");
         break;
         }
     case 3:
@@ -89,34 +82,37 @@ void menu(){
         }else{
         cout<<"\nElemento no encontrado\n";
         }
-        system("pause");
         break;
-    case 4:
+    case 4:{
         cout << "\nDigite el numero a eliminar: ";
         cin >>datoEliminar;
+        cout << a->raiz->dato << endl;
         eliminar(a->raiz,datoEliminar);
         cout << endl;
-        system("pause");
         break;
+        }
     case 5:
         cout << "\nRecorrido en PreOrden: ";
         preOrden(a->raiz);
         cout << endl;
-        system("pause");
         break;
     case 6:
         cout << "\nRecorrido en InOrden: ";
         inOrden(a->raiz);
         cout << endl;
-        system("pause");
         break;
     case 7:
         cout << "\nRecorrido en PostOrden: ";
         postOrden(a->raiz);
         cout << endl;
-        system("pause");
         break;
     }
+        setbkcolor(0);
+        cleardevice();
+        int windowWidth = getmaxx();
+        int windowHeight = getmaxy();
+        dibujarArbol<Nodo>(a->raiz, windowWidth/2, 100, windowWidth/4, 0);
+        system("pause");
         system("cls");
     }while(8!=opcion);
 
