@@ -1,6 +1,7 @@
 #include<iostream>
 #include "BalancearArbol.h"
 #include "GraficarArbol.h"
+#include "Recorridos.h"
 
 using namespace std;
 
@@ -32,10 +33,15 @@ Nodo *crearNodo(int n);
 void insertarNodo(Arbol *a,Nodo *n);
 void mostrarArbol(Nodo *arbol, int contador);
 bool busqueda(Nodo *arbol, int n);
+void eliminar(Nodo *arbol, int n);
+void eliminarNodo(Nodo *nodo);
+Nodo *minimo(Nodo *arbol);
+void reemplazar(Nodo *arbol, Nodo *nuevo);
+void destruirNodo(Nodo *nodo);
 
 //Funcion de menu
 void menu(){
-    int dato, opcion, contador=0;
+    int dato, opcion, contador=0, datoEliminar;
 
     Arbol *a = crearArbol();
     do{
@@ -43,7 +49,11 @@ void menu(){
         cout<<"1. Insertar un nuevo nodo"<<endl;
         cout<<"2. Mostrar el arbol completo"<<endl;
         cout<<"3. Buscar un elemento en el arbol"<<endl;
-        cout<<"4. Salir"<<endl;
+        cout<<"4. Eliminar nodo del arbol" << endl;
+        cout<<"5. PreOrden" << endl;
+        cout<<"6. inOrden" << endl;
+        cout<<"7. PostOrden" << endl;
+        cout<<"8. Salir"<<endl;
         cout<<"Opcion: "<<endl;
         cin>>opcion;
         switch(opcion){
@@ -77,9 +87,34 @@ void menu(){
         }
         system("pause");
         break;
-        }
+    case 4:
+        cout << "\nDigite el numero a eliminar: ";
+        cin >>datoEliminar;
+        eliminar(a->raiz,datoEliminar);
+        cout << endl;
+        system("pause");
+        break;
+    case 5:
+        cout << "\nRecorrido en PreOrden: ";
+        preOrden(a->raiz);
+        cout << endl;
+        system("pause");
+        break;
+    case 6:
+        cout << "\nRecorrido en InOrden: ";
+        inOrden(a->raiz);
+        cout << endl;
+        system("pause");
+        break;
+    case 7:
+        cout << "\nRecorrido en PostOrden: ";
+        postOrden(a->raiz);
+        cout << endl;
+        system("pause");
+        break;
+    }
         system("cls");
-    }while(4!=opcion);
+    }while(8!=opcion);
 
 }
 
@@ -152,23 +187,74 @@ void mostrarArbol(Nodo *arbol,int cont){
         mostrarArbol(arbol->izq,cont+1);
     }
 }
-/*
-Nodo *recuperarNodo(Nodo *arbol, int n){
-    else if(arbol->dato ==n){
-        return arbol;
 
-    }else if(n< arbol->dato){
-        return busqueda(arbol->izq,n);
-    }else{
-        return busqueda(arbol->der,n);
-        }
-}
-
-void eliminarNodo(Nodo *arbol, int n){
-    Nodo *encontrado, *aux;
-    if(busqueda(arbol,n)){
-        encontrado = recuperarNodo(arbol,n);
-
+//Para eliminar un nodo del arbol
+void eliminar(Nodo *arbol, int n){
+    if(arbol==NULL){
+        return;
+    }
+    else if(n< arbol->dato){ // si el valor es menor busca por la izquierda
+        eliminar(arbol->izq,n);
+    }
+    else if(n > arbol->dato){ // si el elemento es mayor busca por la derecha
+        eliminar(arbol->der,n);
+    }
+    else{
+        eliminarNodo(arbol);
     }
 }
-*/
+
+Nodo *minimo(Nodo *arbol){
+    if(arbol == NULL){
+        return NULL;
+    }
+    if(arbol->izq){
+        return minimo(arbol->izq);
+    }
+    else{
+        return arbol;
+    }
+}
+
+void reemplazar(Nodo *arbol, Nodo *nuevo){
+    if(arbol->padre){
+        if(arbol->dato == arbol->padre->izq->dato){
+            arbol->padre->izq = nuevo;
+        }
+        else if(arbol->dato == arbol->padre->der->dato){
+            arbol->padre->der = nuevo;
+        }
+    }
+    if(nuevo){
+        nuevo->padre = arbol->padre;
+    }
+}
+
+void destruirNodo(Nodo *nodo){
+    nodo->izq = NULL;
+    nodo->der = NULL;
+
+    delete nodo;
+}
+
+void eliminarNodo(Nodo *nodo){
+    if(nodo->izq && nodo->der){ //caso 1 el nodo tiene ambos hijos
+        Nodo *menor = minimo(nodo->der);
+        nodo->dato= menor->dato;
+        eliminarNodo(menor);
+    }
+    else if(nodo->izq){
+        reemplazar(nodo, nodo->izq);
+        destruirNodo(nodo);
+    }
+    else if(nodo->der){
+        reemplazar(nodo,nodo->der);
+        destruirNodo(nodo);
+    }
+    else{
+        reemplazar(nodo,NULL);
+        destruirNodo(nodo);
+    }
+}
+
+
