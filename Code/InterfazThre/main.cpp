@@ -70,7 +70,7 @@ int WINAPI WinMain(HINSTANCE hIns, HINSTANCE hInstanciaPrevia, LPSTR lpCmdLinea,
     clase.hIconSm = LoadIcon(NULL, IDI_INFORMATION);
     clase.hCursor = LoadCursor(NULL, IDC_ARROW);
     clase.lpszClassName = "IdentificadorVentana";
-    clase.hbrBackground = CreateSolidBrush(RGB(21, 232, 189));
+    clase.hbrBackground = CreateSolidBrush(RGB(183, 55, 243));
     if (!RegisterClassEx(&clase)) {
         MessageBox(NULL, "No se pudo ejecutar la aplicacion", "Error", MB_ICONERROR);
         return EXIT_FAILURE;
@@ -416,11 +416,11 @@ LRESULT CALLBACK ProcedimientoVentanaTerciaria(HWND hwnd, UINT msg, WPARAM wPara
 
             CreateWindow("Static", "Preorden",
                          WS_VISIBLE | WS_CHILD | SS_NOTIFY,
-                         20, 50, 250, 20, hwnd, (HMENU)ID_LABEL, NULL, NULL);
+                         20, 50, 400, 40, hwnd, (HMENU)ID_LABEL, NULL, NULL);
 
             CreateWindow("Static", charArray,
                          WS_VISIBLE | WS_CHILD | SS_NOTIFY,
-                         20, 80, 250, 20, hwnd, (HMENU)ID_LABEL_RESULT, NULL, NULL);
+                         20, 80,  400, 40,  hwnd, (HMENU)ID_LABEL_RESULT, NULL, NULL);
             resultado="";
             inOrden(a->raiz, resultado);
 
@@ -428,11 +428,11 @@ LRESULT CALLBACK ProcedimientoVentanaTerciaria(HWND hwnd, UINT msg, WPARAM wPara
 
             CreateWindow("Static", "InOrden",
                          WS_VISIBLE | WS_CHILD | SS_NOTIFY,
-                         20, 110, 250, 20, hwnd, (HMENU)ID_LABEL, NULL, NULL);
+                         20, 110,  400, 40,  hwnd, (HMENU)ID_LABEL, NULL, NULL);
 
             CreateWindow("Static", charArray,
                          WS_VISIBLE | WS_CHILD | SS_NOTIFY,
-                         20, 140, 250, 20, hwnd, (HMENU)ID_LABEL_RESULT, NULL, NULL);
+                         20, 140,  400, 40,  hwnd, (HMENU)ID_LABEL_RESULT, NULL, NULL);
                         inOrden(a->raiz, resultado);
             resultado="";
             postOrden(a->raiz, resultado);
@@ -441,16 +441,16 @@ LRESULT CALLBACK ProcedimientoVentanaTerciaria(HWND hwnd, UINT msg, WPARAM wPara
 
             CreateWindow("Static", "PostOrden",
                          WS_VISIBLE | WS_CHILD | SS_NOTIFY,
-                         20, 170, 250, 20, hwnd, (HMENU)ID_LABEL, NULL, NULL);
+                         20, 170,  400, 40,  hwnd, (HMENU)ID_LABEL, NULL, NULL);
 
             CreateWindow("Static", charArray,
                          WS_VISIBLE | WS_CHILD | SS_NOTIFY,
-                         20, 200, 250, 20, hwnd, (HMENU)ID_LABEL_RESULT, NULL, NULL);
+                         20, 200,  400, 40,  hwnd, (HMENU)ID_LABEL_RESULT, NULL, NULL);
         }
         break;
     }
         case WM_DESTROY: {
-        hwndVentanaSecundaria = NULL;
+        hwndVentanaTerciaria = NULL;
         break;
     }
     default: {
