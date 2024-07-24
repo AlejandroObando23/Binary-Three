@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <string>
 #include <iostream>
+#include "Arboles_insertar_busqueda.h"
 using namespace std;
 #define ID_LABEL 100
 #define ID_BTNSALIR 101
@@ -11,6 +12,7 @@ using namespace std;
 #define ID_BTNELIMINACION 106
 #define ID_BTNGUARDAR 107
 #define ID_TEXT 108
+
 
 //Ventanas
 //Funciones
@@ -35,7 +37,7 @@ HWND textEdit;
 
 /*
 Secundario = Incersion
-Tercero = Balanceo
+Tercero = Preorden
 Cuarto = Busqueda
 Quinto = Recorridos
 Sexto = Eliminacion
@@ -44,8 +46,14 @@ Sexto = Eliminacion
 */
 
 HINSTANCE hInstancia;
+    int dato, opcion, contador=0, datoEliminar;
+    Arbol *a = crearArbol();
+
+
+
 
 int WINAPI WinMain(HINSTANCE hIns, HINSTANCE hInstanciaPrevia, LPSTR lpCmdLinea, int nCmdShow) {
+    initwindow(720, 720);
     hInstancia = hIns;
     HWND ventana;
     MSG mensaje;
@@ -330,6 +338,8 @@ LRESULT CALLBACK ProcediementoVentana(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
     default: {
         return DefWindowProc(hwnd, msg, wParam, lParam);
     }
+
+
     }
     return 0;
 }
@@ -357,9 +367,20 @@ LRESULT CALLBACK ProcedimientoVentanaSecundaria(HWND hwnd, UINT msg, WPARAM wPar
         if (LOWORD(wParam) == ID_BTNGUARDAR) {
                 char buffer[256];
                 GetWindowText(textEdit, buffer, 256);
-                cout<<buffer;
+                dato = atoi(buffer);
+                cout<<dato;
+
+                insertarNodo(a,crearNodo(dato));
+                setbkcolor(0);
+                cleardevice();
+                int windowWidth = getmaxx();
+                int windowHeight = getmaxy();
+                dibujarArbol<Nodo>(a->raiz, windowWidth/2, 100, windowWidth/4, 0);
+
+
         }
         break;
+
     }
     case WM_DESTROY: {
         hwndVentanaSecundaria = NULL;
@@ -368,28 +389,39 @@ LRESULT CALLBACK ProcedimientoVentanaSecundaria(HWND hwnd, UINT msg, WPARAM wPar
     default: {
         return DefWindowProc(hwnd, msg, wParam, lParam);
     }
+
+
+
     }
     return 0;
 }
 LRESULT CALLBACK ProcedimientoVentanaTerciaria(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
     case WM_CREATE: {
-        CreateWindow(
-            "BUTTON",
-            "Cerrar",
-            WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-            50, 50, 100, 30,
-            hwnd,
-            (HMENU)ID_BTNGUARDAR,
-            NULL,
-            NULL
-        );
+
+        CreateWindow("Static","Ingrese un numero : ",WS_VISIBLE | WS_CHILD |SS_NOTIFY,20 ,10,150,20,hwnd,(HMENU)ID_LABEL,NULL,NULL);
+        textEdit=CreateWindow("EDIT",   // Predefined class; Unicode assumed
+                NULL,         // No window title
+                WS_CHILD | WS_VISIBLE | WS_BORDER | ES_LEFT| ES_NUMBER, // Styles
+                170,         // x position
+                10,         // y position
+                200,        // Text box width
+                25,        // Text box height
+                hwnd,       // Parent window
+                (HMENU) ID_TEXT,       // No menu.
+                GetModuleHandle(NULL),
+                NULL);
+        CreateWindow("BUTTON", "Guardar",  WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,80, 50, 100, 30, hwnd,(HMENU)ID_BTNGUARDAR,NULL,NULL);
 
         break;
     }
     case WM_COMMAND: {
         if (LOWORD(wParam) == ID_BTNGUARDAR) {
-            DestroyWindow(hwnd);
+            cout  <<"Hola";
+
+
+
+
         }
         break;
     }
@@ -428,6 +460,15 @@ LRESULT CALLBACK ProcedimientoVentanaCuaternaria(HWND hwnd, UINT msg, WPARAM wPa
                 char buffer[256];
                 GetWindowText(textEdit, buffer, 256);
                 cout<<buffer;
+                dato = atoi(buffer);
+                cout<<dato;
+
+
+            if(busqueda(a->raiz, dato)== true){
+            CreateWindow("Static","El elemento ha sido encontrado",WS_VISIBLE | WS_CHILD |SS_NOTIFY,20 ,100,150,80,hwnd,(HMENU)ID_LABEL,NULL,NULL);
+            }else{
+            CreateWindow("Static","No ha sido encontrado ",WS_VISIBLE | WS_CHILD |SS_NOTIFY,20 ,100,150,80,hwnd,(HMENU)ID_LABEL,NULL,NULL);
+            }
         }
         break;
     }
@@ -500,6 +541,15 @@ LRESULT CALLBACK ProcedimientoVentanaSexta(HWND hwnd, UINT msg, WPARAM wParam, L
                  char buffer[256];
                 GetWindowText(textEdit, buffer, 256);
                 cout<<buffer;
+                dato = atoi(buffer);
+                cout<<dato;
+
+                eliminar(a->raiz,dato);
+                                setbkcolor(0);
+                cleardevice();
+                int windowWidth = getmaxx();
+                int windowHeight = getmaxy();
+                dibujarArbol<Nodo>(a->raiz, windowWidth/2, 100, windowWidth/4, 0);
         }
         break;
     }
@@ -510,6 +560,7 @@ LRESULT CALLBACK ProcedimientoVentanaSexta(HWND hwnd, UINT msg, WPARAM wParam, L
     default: {
         return DefWindowProc(hwnd, msg, wParam, lParam);
     }
+
     }
     return 0;
 
